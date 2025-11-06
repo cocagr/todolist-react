@@ -17,12 +17,12 @@ const App = () => {
 
   return (
     <div className="todo-container">
-      <h1 className="todo-title">todos</h1>
+      <h1 className="todo-title">Tareas</h1>
 
       <div className="todo-box">
         <input
           type="text"
-          placeholder="What needs to be done?"
+          placeholder="Que queda por hacer?"
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -46,7 +46,7 @@ const App = () => {
         </ul>
 
         <div className="todo-footer">
-          {tasks.length} {tasks.length === 1 ? "item" : "items"} left
+          {tasks.length} {tasks.length === 1 ? "item" : "tareas"} por hacer
         </div>
       </div>
     </div>
