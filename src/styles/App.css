@@ -81,3 +81,20 @@ body {
   color: #aaa;
   border-top: 1px solid #eee;
 }
+
+.clear-btn {
+  width: calc(100% - 40px);
+  margin: 10px 20px 20px 20px;
+  padding: 10px 0;
+  font-size: 16px;
+  color: white;
+  background-color: #e74c3c;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.clear-btn:hover {
+  background-color: #c0392b;
+}
