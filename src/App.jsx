@@ -11,19 +11,24 @@ const App = () => {
   }, []);
 
   const createUser = async () => {
-  try {
-    const resp = await fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify([]),
-      headers: { "Content-Type": "application/json" },
-    });
-    console.log("Create user status:", resp.status);
-    const data = await resp.json();
-    console.log("Create user response:", data);
-  } catch (error) {
-    console.error("Error al crear usuario:", error);
-  }
-};
+    try {
+      const resp = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify([]),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!resp.ok && resp.status !== 400) {
+        throw new Error("Error creando usuario");
+      } else if (resp.status === 400) {
+        console.log("Usuario ya existe, continuando...");
+      } else {
+        console.log("Usuario creado correctamente");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const loadTasks = async () => {
     try {
@@ -77,6 +82,20 @@ const App = () => {
     }
   };
 
+  const toggleTaskDone = async (id, newStatus) => {
+    try {
+      const resp = await fetch(`https://playground.4geeks.com/todo/todos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_done: newStatus }),
+      });
+      if (!resp.ok) throw new Error("Error al actualizar tarea");
+      await loadTasks();
+    } catch (error) {
+      console.error("Error actualizando tarea:", error);
+    }
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       addTask();
@@ -101,7 +120,19 @@ const App = () => {
           {tasks.length > 0 ? (
             tasks.map((task) => (
               <li key={task.id} className="todo-item">
-                {task.label}
+                <input
+                  type="checkbox"
+                  checked={task.is_done}
+                  onChange={() => toggleTaskDone(task.id, !task.is_done)}
+                />
+                <span
+                  style={{
+                    textDecoration: task.is_done ? "line-through" : "none",
+                    marginLeft: "10px",
+                  }}
+                >
+                  {task.label}
+                </span>
                 <i
                   className="fa-solid fa-xmark delete-icon"
                   onClick={() => deleteTask(task.id)}
@@ -114,7 +145,7 @@ const App = () => {
         </ul>
 
         <div className="todo-footer">
-          {tasks.length} {tasks.length === 1 ? "tarea" : "tareas"} por hacer
+          {tasks.filter(task => !task.is_done).length} {tasks.filter(task => !task.is_done).length === 1 ? "tarea" : "tareas"} por hacer
         </div>
 
         {tasks.length > 0 && (

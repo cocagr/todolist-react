@@ -98,3 +98,8 @@ body {
 .clear-btn:hover {
   background-color: #c0392b;
 }
+
+.todo-item input[type="checkbox"] {
+  cursor: pointer;
+  transform: scale(1.2);
+}
